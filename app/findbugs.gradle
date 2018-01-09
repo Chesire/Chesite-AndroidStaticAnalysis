@@ -1,0 +1,31 @@
+apply plugin: 'findbugs'
+
+// https://docs.gradle.org/current/dsl/org.gradle.api.plugins.quality.FindBugsExtension.html
+task findbugs(
+        type: FindBugs,
+        dependsOn: assemble,
+        group: 'verification') {
+    description 'Runs the FindBugs task and generates reports to the build/reports directory'
+
+    classes = files("$projectDir.absolutePath/build/intermediates/classes")
+    classpath = files()
+    source 'src/main/java'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    effort = "max"
+    reportLevel = "low"
+    ignoreFailures = false
+    excludeFilter = new File("${project.rootDir}/analysis-configs/findbugs-excludefilter.xml")
+
+    reports {
+        xml {
+            enabled = false
+            destination "$project.buildDir/reports/findbugs/findbugs.xml"
+        }
+        html {
+            enabled = true
+            destination "$project.buildDir/reports/findbugs/findbugs.html"
+        }
+    }
+}

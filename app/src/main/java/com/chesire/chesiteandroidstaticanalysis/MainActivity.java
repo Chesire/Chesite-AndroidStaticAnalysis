@@ -7,6 +7,7 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
     private String mCausePmdIssue = "Using this string inside the post below will cause an issue";
+    public String mFindBugsIssue = "Having this string public will cause a FindBugs issue";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
