@@ -1,0 +1,34 @@
+apply plugin: 'pmd'
+
+// https://docs.gradle.org/current/dsl/org.gradle.api.plugins.quality.PmdExtension.html
+task pmd(
+        type: Pmd,
+        dependsOn: assemble,
+        group: 'verification') {
+    description 'Runs the PMD task and generates reports to the build/reports directory'
+
+    ignoreFailures = false
+    ruleSets = [
+            "java-basic",
+            "java-braces",
+            "java-strings",
+            "java-design",
+            "java-unusedcode",
+            "java-android"
+    ]
+
+    source 'src/main/java'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml {
+            enabled = true
+            destination "$project.buildDir/reports/pmd/pmd.xml"
+        }
+        html {
+            enabled = true
+            destination "$project.buildDir/reports/pmd/pmd.html"
+        }
+    }
+}
