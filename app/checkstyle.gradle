@@ -1,0 +1,26 @@
+apply plugin: 'checkstyle'
+
+// https://docs.gradle.org/current/dsl/org.gradle.api.plugins.quality.CheckstyleExtension.html
+task checkstyle(
+        type: Checkstyle,
+        group: 'verification') {
+    description 'Runs the CheckStyle task and generates reports to the build/reports directory'
+
+    classpath = files()
+    source 'src/main/java'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    configFile = file("$project.rootDir/analysis-configs/checkstyle-rules.xml")
+
+    reports {
+        xml {
+            enabled = true
+            destination "$project.buildDir/reports/checkstyle/checkstyle.xml"
+        }
+        html {
+            enabled = true
+            destination "$project.buildDir/reports/checkstyle/checkstyle.html"
+        }
+    }
+}

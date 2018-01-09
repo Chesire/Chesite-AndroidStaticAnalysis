@@ -20,5 +20,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Tag", mCausePmdIssue);
             }
         });
+
+        try {
+            String checkStyleWarning = "The empty catch below will trigger a CheckStyle warning";
+        } catch (Exception ex) {
+
+        }
     }
 }
