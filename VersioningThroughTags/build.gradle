@@ -1,0 +1,54 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.kotlin_version = "1.4.0"
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:3.6.3"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext.retrieveVersionName = {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags', '--always'
+        standardOutput = stdout
+    }
+
+    def fullTag = stdout.toString().trim()
+    return fullTag.contains('-') ? fullTag.substring(0, fullTag.indexOf('-')) : fullTag
+}
+
+ext.retrieveVersionCode = {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags', '--always'
+        standardOutput = stdout
+    }
+
+    def fullTag = stdout.toString().trim()
+    if (!fullTag.contains('.')) {
+        return 1
+    } else if (fullTag.contains('-')) {
+        return fullTag.substring(fullTag.lastIndexOf('.') + 1, fullTag.indexOf('-')).toInteger()
+    } else {
+        return fullTag.substring(fullTag.lastIndexOf('.') + 1, fullTag.length()).toInteger()
+    }
+}
